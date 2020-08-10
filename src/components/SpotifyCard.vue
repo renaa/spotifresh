@@ -40,6 +40,7 @@ export default {
   }
   .song{
     font-weight: 600;
+    margin-top: 0.6em;
   }
 }
 h3 {
