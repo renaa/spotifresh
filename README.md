@@ -1,5 +1,4 @@
-# spotifresh
-[demo](https://spotifresh.netlify.app)
+# spotifresh [demo](https://spotifresh.netlify.app)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7bc3bc6d-5ae6-439a-8d0d-385bcaf78eb8/deploy-status)](https://app.netlify.com/sites/spotifresh/deploys)
 
