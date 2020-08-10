@@ -1,4 +1,4 @@
-# spotifresh
+# spotifresh 
 List out the latest 50 releases on spotify
 
 [demo](https://spotifresh.netlify.app)
