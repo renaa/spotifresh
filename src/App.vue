@@ -1,28 +1,19 @@
 <template>
   <div id="app">
-    <!-- <SpotifyCard
-      :song="testSong"
-      artist="JonDooe"
-      imgUrl="https://i.pinimg.com/originals/4c/97/10/4c971038f52be5ecc2d3845f303edd64.jpg"
-
-      :outLink="album.external_urls.spotify"
-
-    /> -->
-
-    <spotify-card v-for="(album, index) in albums" :key="index"
+    <spotify-card
+      v-for="(album, index) in albums"
+      :key="index"
       :song="album.name"
       :artist="getArtistDisplayName(album.artists)"
       :imgUrl="album.images[0].url"
-      :outLink="album.uri"
+      :outLink="getAlbumUri(album)"
     />
-
-   
   </div>
 </template>
 
 <script>
 import SpotifyCard from "./components/SpotifyCard.vue"
-
+// import secret from "../.secret.js"
 export default {
   name: "App",
   components: {
@@ -32,43 +23,56 @@ export default {
     return {
       gotResult: false,
       albums: {},
-      
     }
   },
   methods: {
-    getArtistDisplayName(artists){
-      let s = ''
+    getArtistDisplayName(artists) {
+      let s = ""
       artists.forEach(element => {
-        s+= element.name + " ➕ "
-      });
-      return s.slice(0, -2);
+        s += element.name + " ➕ "
+      })
+      return s.slice(0, -2)
+    },
+    getAlbumUri(album){
+      return album.uri// + ":autoplay:1"
     }
   },
-  //https://developer.spotify.com/console/get-new-releases/?country=&limit=50&offset=5
+
   created: function() {
-    fetch("https://api.spotify.com/v1/browse/new-releases?limit=50&offset=5", {
+    fetch("https://accounts.spotify.com/api/token", {
+      body: "grant_type=client_credentials",
+      headers: {
+        Authorization:
+          `Basic ZDVhNzNjYTUyOTk3NDVmZmI1OGVmN2RmMjllODUyN2Y6Y2FmZTUzNzZhZmRkNDA5YzgyY2E4YjQ4NTA1MjEwMzc=`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: "POST",
+    })
+    .then(response => response.json())
+    .then(bearer => {
+      fetch("https://api.spotify.com/v1/browse/new-releases?limit=50", {
       headers: {
         Accept: "application/json",
         Authorization:
-          "Bearer BQBg3y0aqL6B-jHeVSi9MVKnWwLNXEz22T57BO21EjCagB6_6fcgnVlEg2kpXs0gYghtH1NZrO5P3HBUU_2idF2c0WJPGgDycP_g2oA0T-_INpynd2aZDwhcSNOhcjEeOVOAmDByD9ZXlnAc5PsYm_KKGMDkdg",
+          `Bearer ${bearer.access_token}`,
         "Content-Type": "application/json",
       },
     })
       .then(response => response.json())
       .then(result => {
         this.albums = result.albums.items
-        // this.album = this.albums[0]
         this.gotResult = true
-        
       })
-      .catch(error => console.error(error))
-  },
+      .catch(error => console.error(error));
+  
+    }).catch(error => console.error(error));
+  }
 }
 </script>
 
 <style lang="scss">
-body{
-  margin:0;
+body {
+  margin: 0;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
