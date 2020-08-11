@@ -13,7 +13,6 @@
 
 <script>
 import SpotifyCard from "./components/SpotifyCard.vue"
-// import secret from "../.secret.js"
 export default {
   name: "App",
   components: {
@@ -33,40 +32,38 @@ export default {
       })
       return s.slice(0, -2)
     },
-    getAlbumUri(album){
-      return album.uri// + ":autoplay:1"
-    }
+    getAlbumUri(album) {
+      return album.uri 
+    },
   },
 
   created: function() {
     fetch("https://accounts.spotify.com/api/token", {
       body: "grant_type=client_credentials",
       headers: {
-        Authorization:
-          `Basic ZDVhNzNjYTUyOTk3NDVmZmI1OGVmN2RmMjllODUyN2Y6Y2FmZTUzNzZhZmRkNDA5YzgyY2E4YjQ4NTA1MjEwMzc=`,
+        Authorization: `Basic ZDVhNzNjYTUyOTk3NDVmZmI1OGVmN2RmMjllODUyN2Y6Y2FmZTUzNzZhZmRkNDA5YzgyY2E4YjQ4NTA1MjEwMzc=`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
       method: "POST",
     })
-    .then(response => response.json())
-    .then(bearer => {
-      fetch("https://api.spotify.com/v1/browse/new-releases?limit=50", {
-      headers: {
-        Accept: "application/json",
-        Authorization:
-          `Bearer ${bearer.access_token}`,
-        "Content-Type": "application/json",
-      },
-    })
       .then(response => response.json())
-      .then(result => {
-        this.albums = result.albums.items
-        this.gotResult = true
+      .then(bearer => {
+        fetch("https://api.spotify.com/v1/browse/new-releases?limit=50", {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${bearer.access_token}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then(response => response.json())
+          .then(result => {
+            this.albums = result.albums.items
+            this.gotResult = true
+          })
+          .catch(error => console.error(error))
       })
-      .catch(error => console.error(error));
-  
-    }).catch(error => console.error(error));
-  }
+      .catch(error => console.error(error))
+  },
 }
 </script>
 
