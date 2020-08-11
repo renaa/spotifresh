@@ -33,42 +33,48 @@ export default {
       return s.slice(0, -2)
     },
     getAlbumUri(album) {
-      return album.uri 
+      return album.uri
     },
   },
+  beforeCreate: async function() {
+    try {
+      let tokenUrl = "https://accounts.spotify.com/api/token"
+      let requestObject = {
+        body: "grant_type=client_credentials",
+        headers: {
+          Authorization: `Basic ${process.env.VUE_APP_B64}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        method: "POST",
+      }
 
-  created: function() {
-    fetch("https://accounts.spotify.com/api/token", {
-      body: "grant_type=client_credentials",
-      headers: {
-        Authorization: `Basic ${process.env.VUE_APP_B64}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      method: "POST",
-    })
-      .then(response => response.json())
-      .then(bearer => {
-        fetch("https://api.spotify.com/v1/browse/new-releases?limit=50", {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${bearer.access_token}`,
-            "Content-Type": "application/json",
-          },
-        })
-          .then(response => response.json())
-          .then(result => {
-            this.albums = result.albums.items
-            this.gotResult = true
-          })
-          .catch(error => console.error(error))
-      })
-      .catch(error => console.error(error))
+      let tokenResponse = await fetch(tokenUrl, requestObject)
+      let bearer = await tokenResponse.json()
+
+      let appUrl = "https://api.spotify.com/v1/browse/new-releases?limit=50"
+      let appRequestObject = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${bearer.access_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+
+      let appResponse = await fetch(appUrl, appRequestObject)
+      let result = await appResponse.json()
+
+      this.albums = result.albums.items
+      this.gotResult = true
+    } catch (error) {
+      console.error(error)
+    }
   },
 }
 </script>
 
 <style lang="scss">
 body {
+  background-color: #2c3e50;
   margin: 0;
 }
 #app {
@@ -76,7 +82,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background-color: #2c3e50;
 
   display: flex;
   flex-wrap: wrap;

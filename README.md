@@ -8,7 +8,7 @@ List out the latest 50 releases on spotify
 
 ## todo ?
 
-open spotify & start playing
+open spotify & start playing // seems not possible
 make and add logo
 add menu? or cog
   - ability to switch between spotify link and link to browser player?
