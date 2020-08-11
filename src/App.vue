@@ -41,7 +41,7 @@ export default {
     fetch("https://accounts.spotify.com/api/token", {
       body: "grant_type=client_credentials",
       headers: {
-        Authorization: `Basic ZDVhNzNjYTUyOTk3NDVmZmI1OGVmN2RmMjllODUyN2Y6Y2FmZTUzNzZhZmRkNDA5YzgyY2E4YjQ4NTA1MjEwMzc=`,
+        Authorization: `Basic ${process.env.VUE_APP_B64}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
       method: "POST",
