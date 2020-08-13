@@ -36,7 +36,7 @@ export default {}
   // position: absolute;
   z-index: 4;
 
-  width: 20%;
+  height: 1.5em;
   padding-top: 10px;
 }
 </style>
