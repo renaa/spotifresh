@@ -3,8 +3,14 @@
     <a :href="outLink">
       <img :src="imgUrl" alt="" />
     </a>
-    <p class="song">{{ song }}</p>
-    <p class="artist">{{ artist }}</p>
+    <div class="info-line">
+      <p class="song">{{ song }}</p>
+      <p class="info">{{album_type}}</p>
+    </div>
+    <div class="info-line">
+      <p class="artist">{{ artist }}</p>
+      <p class="info">{{release_date}}</p>
+    </div>
   </div>
 </template>
 
@@ -15,6 +21,8 @@ export default {
     artist: String,
     imgUrl: String,
     outLink: String,
+    release_date: String,
+    album_type: String,
   },
 }
 </script>
@@ -48,21 +56,16 @@ p {
   font-weight: 600;
   margin-top: 0.6em;
 }
-h3 {
-  margin: 40px 0 0;
+.info-line{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.info{
+  color: #eee6;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: unset;
-  text-decoration: none;
-  display: block;
-  z-index: 3;
-}
+
+
 </style>

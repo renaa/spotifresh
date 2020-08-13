@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <navbar/>
+    <div class="cards-container">
     <spotify-card
       v-for="(album, index) in albums"
       :key="index"
@@ -7,15 +9,20 @@
       :artist="getArtistDisplayName(album.artists)"
       :imgUrl="album.images[0].url"
       :outLink="getAlbumUri(album)"
+      :release_date="album.release_date"
+      :type="album.album_type"
     />
+    </div>
   </div>
 </template>
 
 <script>
+import Navbar from "./components/Navbar.vue"
 import SpotifyCard from "./components/SpotifyCard.vue"
 export default {
   name: "App",
   components: {
+    Navbar,
     SpotifyCard,
   },
   data: function() {
@@ -50,7 +57,7 @@ export default {
 
       let tokenResponse = await fetch(tokenUrl, requestObject)
       let bearer = await tokenResponse.json()
-
+      console.log(requestObject)
       let appUrl = "https://api.spotify.com/v1/browse/new-releases?limit=50"
       let appRequestObject = {
         headers: {
@@ -63,6 +70,7 @@ export default {
       let appResponse = await fetch(appUrl, appRequestObject)
       let result = await appResponse.json()
 
+      console.log(result)
       this.albums = result.albums.items
       this.gotResult = true
     } catch (error) {
@@ -81,9 +89,12 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+}
+.cards-container{
 
+  text-align: center;
   display: flex;
   flex-wrap: wrap;
+
 }
 </style>
