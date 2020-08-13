@@ -44,18 +44,18 @@ export default {
     },
     getAlbumReleaseDate(albumdate) {
       const monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
         "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
       ]
       let date = new Date(Date.parse(albumdate))
       return date.getDate() + ". " + monthNames[date.getMonth()]
