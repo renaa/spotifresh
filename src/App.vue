@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <navbar/>
+    <navbar />
     <div class="cards-container">
-    <spotify-card
-      v-for="(album, index) in albums"
-      :key="index"
-      :song="album.name"
-      :artist="getArtistDisplayName(album.artists)"
-      :imgUrl="album.images[0].url"
-      :outLink="getAlbumUri(album)"
-      :release_date="album.release_date"
-      :type="album.album_type"
-    />
+      <spotify-card
+        v-for="(album, index) in albums"
+        :key="index"
+        :song="album.name"
+        :artist="getArtistDisplayName(album.artists)"
+        :imgUrl="album.images[0].url"
+        :outLink="getAlbumUri(album)"
+        :release_date="getAlbumReleaseDate(album.release_date)"
+        :album_type="album.album_type"
+      />
     </div>
   </div>
 </template>
@@ -35,12 +35,30 @@ export default {
     getArtistDisplayName(artists) {
       let s = ""
       artists.forEach(element => {
-        s += element.name + " ➕ "
+        s += element.name + " | "
       })
       return s.slice(0, -2)
     },
     getAlbumUri(album) {
       return album.uri
+    },
+    getAlbumReleaseDate(albumdate) {
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ]
+      let date = new Date(Date.parse(albumdate))
+      return date.getDate() + ". " + monthNames[date.getMonth()]
     },
   },
   beforeCreate: async function() {
@@ -82,19 +100,71 @@ export default {
 
 <style lang="scss">
 body {
-  background-color: #2c3e50;
+  background-color: #80cc74;
   margin: 0;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-.cards-container{
+  background-color: #80cc74;
 
+  background: linear-gradient(180deg, #80cc74, #7ecaba, #af67d7);
+  background-size: 600% 600%;
+
+  -webkit-animation: AnimationName 15s ease infinite;
+  -moz-animation: AnimationName 15s ease infinite;
+  -o-animation: AnimationName 15s ease infinite;
+  animation: AnimationName 15s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+  0% {
+    background-position: 49% 0%;
+  }
+  50% {
+    background-position: 52% 100%;
+  }
+  100% {
+    background-position: 49% 0%;
+  }
+}
+@-moz-keyframes AnimationName {
+  0% {
+    background-position: 49% 0%;
+  }
+  50% {
+    background-position: 52% 100%;
+  }
+  100% {
+    background-position: 49% 0%;
+  }
+}
+@-o-keyframes AnimationName {
+  0% {
+    background-position: 49% 0%;
+  }
+  50% {
+    background-position: 52% 100%;
+  }
+  100% {
+    background-position: 49% 0%;
+  }
+}
+@keyframes AnimationName {
+  0% {
+    background-position: 49% 0%;
+  }
+  50% {
+    background-position: 52% 100%;
+  }
+  100% {
+    background-position: 49% 0%;
+  }
+}
+.cards-container {
   text-align: center;
   display: flex;
   flex-wrap: wrap;
-
 }
 </style>

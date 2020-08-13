@@ -3,13 +3,13 @@
     <a :href="outLink">
       <img :src="imgUrl" alt="" />
     </a>
-    <div class="info-line">
+    <div class="info-line info-line-top">
       <p class="song">{{ song }}</p>
-      <p class="info">{{album_type}}</p>
+      <p class="info infotop">{{ album_type }}</p>
     </div>
     <div class="info-line">
       <p class="artist">{{ artist }}</p>
-      <p class="info">{{release_date}}</p>
+      <p class="info infobottom">{{ release_date }}</p>
     </div>
   </div>
 </template>
@@ -54,18 +54,17 @@ p {
 }
 .song {
   font-weight: 600;
-  margin-top: 0.6em;
 }
-.info-line{
+.info-line {
   display: flex;
+  position: relative;
   width: 100%;
   align-items: center;
   justify-content: space-between;
-
+  flex-wrap: wrap;
 }
-.info{
+
+.info {
   color: #eee6;
 }
-
-
 </style>

@@ -2,27 +2,27 @@
   <div id="navbar">
     <div class="logo">
       <span>Spoti</span>
-      <img src="@/assets/SpotiFRESH.svg" alt="Fresh" class="FRESH">
+      <img src="@/assets/SpotiFRESH.svg" alt="Fresh" class="FRESH" />
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  
-}
+export default {}
 </script>
 
 <style scoped lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
-#navbar{
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+#navbar {
   color: black;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 4em;
   font-weight: 700;
   display: flex;
+  // background-color: #181818aa;
+  padding-bottom: 0.1em;
 }
-.logo{
+.logo {
   margin: 0 auto;
   display: flex;
   align-content: center;
@@ -31,15 +31,12 @@ export default {
   width: auto;
   align-items: center;
   justify-content: center;
-
-
 }
-.FRESH{
+.FRESH {
   // position: absolute;
   z-index: 4;
 
   width: 20%;
   padding-top: 10px;
 }
-
 </style>
