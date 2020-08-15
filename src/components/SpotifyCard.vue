@@ -1,8 +1,14 @@
 <template>
   <div class="card">
-    <a :href="outLink">
-      <img :src="imgUrl" alt="" />
-    </a>
+    <div class="album-art">
+      <div class="a-wrapper">
+
+      <a :href="outLink">
+        <img :src="imgUrl" alt="" />
+      </a>
+      </div>
+      <div class="inf">test</div>
+    </div>
     <div class="info-line info-line-top">
       <p class="song">{{ song }}</p>
       <p class="info infotop">{{ album_type }}</p>
@@ -33,12 +39,12 @@ export default {
   color: #eee;
 
   text-align: start;
-  margin: 10px;
   padding: 5px;
   width: calc(33.33% - 30px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 10px 0;
 }
 @media only screen and (max-width: 920px) {
   .card {
@@ -66,5 +72,13 @@ p {
 
 .info {
   color: #eee6;
+}
+.inf{
+  display: none;
+}
+album-art {
+  .a-wrapper:hover+.inf{
+    display: block;
+  }
 }
 </style>

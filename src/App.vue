@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <navbar />
+    <navbar @emit-country="changeAlbumsBasedOnCountry" />
     <div class="cards-container">
       <spotify-card
         v-for="(album, index) in albums"
@@ -9,16 +9,20 @@
         :artist="getArtistDisplayName(album.artists)"
         :imgUrl="album.images[0].url"
         :outLink="getAlbumUri(album)"
-        :release_date="getAlbumReleaseDate(album.release_date)"
-        :album_type="album.album_type"
       />
     </div>
+
+    <!-- 
+        :album_type="album.album_type"
+        :release_date="getAlbumReleaseDate(album.release_date)"
+         -->
   </div>
 </template>
 
 <script>
 import Navbar from "./components/Navbar.vue"
 import SpotifyCard from "./components/SpotifyCard.vue"
+import { monthNames } from "./consts"
 export default {
   name: "App",
   components: {
@@ -29,6 +33,15 @@ export default {
     return {
       gotResult: false,
       albums: {},
+      accessToken: "",
+      requestObject: {
+        body: "grant_type=client_credentials",
+        headers: {
+          Authorization: `Basic ${process.env.VUE_APP_B64}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        method: "POST",
+      },
     }
   },
   methods: {
@@ -37,34 +50,51 @@ export default {
       artists.forEach(element => {
         s += element.name + " | "
       })
-      return s.slice(0, -2)
+      return s.slice(0, -3)
     },
     getAlbumUri(album) {
       return album.uri
     },
     getAlbumReleaseDate(albumdate) {
-      const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ]
       let date = new Date(Date.parse(albumdate))
       return date.getDate() + ". " + monthNames[date.getMonth()]
     },
+    async changeAlbumsBasedOnCountry(countryCode) {
+      console.log(countryCode)
+
+      await this.bearerFetch(
+        `https://api.spotify.com/v1/browse/new-releases?country=${countryCode}`
+      )
+
+      console.log(countryCode)
+    },
+    async bearerFetch(url) {
+      try {
+        let appUrl = url
+        let appRequestObject = {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+
+        let appResponse = await fetch(appUrl, appRequestObject)
+        let result = await appResponse.json()
+
+        console.log(result)
+        this.albums = result.albums.items
+        this.gotResult = true
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
   beforeCreate: async function() {
+    let tokenUrl, requestObject
     try {
-      let tokenUrl = "https://accounts.spotify.com/api/token"
-      let requestObject = {
+      tokenUrl = "https://accounts.spotify.com/api/token"
+      requestObject = {
         body: "grant_type=client_credentials",
         headers: {
           Authorization: `Basic ${process.env.VUE_APP_B64}`,
@@ -72,33 +102,21 @@ export default {
         },
         method: "POST",
       }
-
-      let tokenResponse = await fetch(tokenUrl, requestObject)
-      let bearer = await tokenResponse.json()
-      console.log(requestObject)
-      let appUrl = "https://api.spotify.com/v1/browse/new-releases?limit=50"
-      let appRequestObject = {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${bearer.access_token}`,
-          "Content-Type": "application/json",
-        },
-      }
-
-      let appResponse = await fetch(appUrl, appRequestObject)
-      let result = await appResponse.json()
-
-      console.log(result)
-      this.albums = result.albums.items
-      this.gotResult = true
     } catch (error) {
-      console.error(error)
+      console.log(error)
     }
+
+    let tokenResponse = await fetch(tokenUrl, requestObject)
+    let bearer = await tokenResponse.json()
+    this.accessToken = bearer.access_token
+    await this.bearerFetch("https://api.spotify.com/v1/browse/new-releases?limit=50")
   },
 }
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
 body {
   background-color: #80cc74;
   margin: 0;
@@ -166,5 +184,8 @@ body {
   text-align: center;
   display: flex;
   flex-wrap: wrap;
+  margin: 10px;
+  margin-bottom: 0;
+  justify-content: space-evenly;
 }
 </style>
