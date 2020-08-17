@@ -1,9 +1,8 @@
 <template>
   <div id="app">
     <navbar @emit-country="changeAlbumsBasedOnCountry" />
-    <div class="cards-container">
+    <div v-if="checkAlbumLength()" class="cards-container">
       <spotify-card
-        
         v-for="(album, index) in albums"
         :key="index"
         :song="album.name"
@@ -11,6 +10,9 @@
         :imgUrl="album.images[0].url"
         :outLink="getAlbumUri(album)"
       />
+    </div>
+    <div v-else class="no-result-outer">
+      <div class="no-result-inner">no result</div>
     </div>
 
     <!-- 
@@ -33,7 +35,7 @@ export default {
   data: function() {
     return {
       gotResult: false,
-      albums: {},
+      albums: [],
       accessToken: "",
       requestObject: {
         body: "grant_type=client_credentials",
@@ -86,6 +88,9 @@ export default {
         console.log(error)
       }
     },
+    checkAlbumLength() {
+      return this.albums.length !== 0
+    },
   },
   beforeCreate: async function() {
     let tokenUrl, requestObject
@@ -117,12 +122,7 @@ export default {
 body {
   background-color: #80cc74;
   margin: 0;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #80cc74;
+  min-height: 100vh;
 
   background: linear-gradient(180deg, #80cc74, #7ecaba, #af67d7);
   background-size: 600% 600%;
@@ -131,6 +131,11 @@ body {
   -moz-animation: AnimationName 15s ease infinite;
   -o-animation: AnimationName 15s ease infinite;
   animation: AnimationName 15s ease infinite;
+}
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 @-webkit-keyframes AnimationName {
@@ -184,5 +189,16 @@ body {
   margin: 10px;
   margin-bottom: 0;
   justify-content: space-evenly;
+}
+.no-result-outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+.no-result-inner {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2em;
+
 }
 </style>
