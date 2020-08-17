@@ -31,7 +31,6 @@ export default {
   methods: {
     toggleCountries() {
       this.show = !this.show
-      console.log(markets)
     },
     sendCountry(countryCode) {
       this.toggleCountries()

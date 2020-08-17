@@ -3,6 +3,7 @@
     <navbar @emit-country="changeAlbumsBasedOnCountry" />
     <div class="cards-container">
       <spotify-card
+        
         v-for="(album, index) in albums"
         :key="index"
         :song="album.name"
@@ -60,15 +61,11 @@ export default {
       return date.getDate() + ". " + monthNames[date.getMonth()]
     },
     async changeAlbumsBasedOnCountry(countryCode) {
-      console.log(countryCode)
-
-      await this.bearerFetch(
+      await this.albumsFetch(
         `https://api.spotify.com/v1/browse/new-releases?country=${countryCode}`
       )
-
-      console.log(countryCode)
     },
-    async bearerFetch(url) {
+    async albumsFetch(url) {
       try {
         let appUrl = url
         let appRequestObject = {
@@ -82,7 +79,7 @@ export default {
         let appResponse = await fetch(appUrl, appRequestObject)
         let result = await appResponse.json()
 
-        console.log(result)
+        // console.log(result)
         this.albums = result.albums.items
         this.gotResult = true
       } catch (error) {
@@ -109,7 +106,7 @@ export default {
     let tokenResponse = await fetch(tokenUrl, requestObject)
     let bearer = await tokenResponse.json()
     this.accessToken = bearer.access_token
-    await this.bearerFetch("https://api.spotify.com/v1/browse/new-releases?limit=50")
+    await this.albumsFetch("https://api.spotify.com/v1/browse/new-releases?limit=50")
   },
 }
 </script>
