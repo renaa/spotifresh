@@ -4,6 +4,7 @@
       <span>Spoti</span>
       <img src="@/assets/SpotiFRESH.svg" alt="Fresh" class="FRESH" />
     </div>
+      <div class="description">The latest, most popular releases on Spotify, updates on Fridays 🎊</div>
     <div class="list" :class="show ? 'show' : 'not-show'">
       <country
         v-for="country in countries"
@@ -89,5 +90,9 @@ export default {
   z-index: 5;
   display: flex;
   flex-wrap: wrap;
+}
+.description{
+  font-size: 0.3em;
+  text-align: center;
 }
 </style>
